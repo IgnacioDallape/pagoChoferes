@@ -760,7 +760,20 @@ body {
   font-family: inherit;
   outline: none;
   transition: border-color .18s, background .18s;
-  appearance: auto;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group input[type="date"] {
+  text-align: left;
+  cursor: pointer;
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='%237A6548'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .75rem center;
+  padding-right: 2rem;
 }
 
 .form-group input:focus,
