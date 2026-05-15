@@ -778,7 +778,7 @@ body {
   gap: .75rem;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 540px) {
   .form-row { grid-template-columns: 1fr; }
 }
 
