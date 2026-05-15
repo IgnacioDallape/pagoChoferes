@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sueldo Choferes</title>
   <meta name="theme-color" content="#231508">
   <meta name="mobile-web-app-capable" content="yes">
@@ -229,7 +229,23 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+          // Cuando el nuevo SW termina de instalarse, recargamos automáticamente
+          reg.addEventListener('updatefound', () => {
+            const newSW = reg.installing;
+            newSW.addEventListener('statechange', () => {
+              if (newSW.state === 'activated') {
+                window.location.reload();
+              }
+            });
+          });
+        }).catch(() => {});
+
+        // Recarga cuando el SW que controla la página cambia (reload-once guard)
+        let reloading = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!reloading) { reloading = true; window.location.reload(); }
+        });
       });
     }
   </script>
