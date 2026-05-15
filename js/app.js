@@ -99,7 +99,6 @@ function goBack() {
   currentDriverId = null;
   tripFilter = 'all';
   tripSearch = '';
-  document.getElementById('trip-search').value = '';
   showView('view-main');
   renderDriverGrid();
 }
@@ -168,7 +167,6 @@ function openDriver(id) {
   tripFilter = 'all';
   tripSearch = '';
 
-  document.getElementById('trip-search').value = '';
   document.querySelectorAll('.tab-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.filter === 'all')
   );
@@ -221,12 +219,7 @@ function renderTripList() {
 
   if (tripSearch) {
     const q = tripSearch.toLowerCase();
-    trips = trips.filter(v =>
-      (v.destino     || '').toLowerCase().includes(q) ||
-      (v.origen      || '').toLowerCase().includes(q) ||
-      (v.cliente     || '').toLowerCase().includes(q) ||
-      (v.descripcion || '').toLowerCase().includes(q)
-    );
+    trips = trips.filter(v => (v.observaciones || '').toLowerCase().includes(q));
   }
 
   trips.sort((a, b) => b.fecha.localeCompare(a.fecha));
@@ -257,23 +250,16 @@ function renderTripList() {
     return `
       <div class="trip-card ${stateClass}">
         <div class="trip-card-top">
-          <div>
-            <div class="trip-route">
-              ${escHtml(v.origen)}<span class="arrow"> → </span>${escHtml(v.destino)}
-            </div>
-            ${v.descripcion ? `<div class="trip-desc">${escHtml(v.descripcion)}</div>` : ''}
+          <div class="trip-card-left">
+            <div class="trip-importe ${stateClass}">${formatMoney(v.importe)}</div>
+            ${v.observaciones ? `<div class="trip-obs-inline">${escHtml(v.observaciones)}</div>` : ''}
           </div>
-          <div class="trip-importe ${stateClass}">${formatMoney(v.importe)}</div>
+          <div class="trip-card-right">
+            <span class="trip-date">${formatDate(v.fecha)}</span>
+            <span class="badge ${badgeClass}">${badgeText}</span>
+          </div>
         </div>
-
-        <div class="trip-meta">
-          <span>${formatDate(v.fecha)}</span>
-          ${v.cliente ? `<span>· ${escHtml(v.cliente)}</span>` : ''}
-          <span class="badge ${badgeClass}">${badgeText}</span>
-        </div>
-
         <div class="trip-card-bottom">
-          <div class="trip-obs">${v.observaciones ? escHtml(v.observaciones) : ''}</div>
           <div class="trip-card-actions">
             ${!v.pagado
               ? `<button class="btn-mark-paid" onclick="markPaid('${v.id}')">✓ Marcar pagado</button>`
@@ -365,18 +351,13 @@ function confirmDeleteDriver() {
 ============================================================ */
 
 function openAddTrip() {
-  document.getElementById('modal-trip-title').textContent = 'Nuevo Viaje';
-  document.getElementById('trip-fecha').value       = new Date().toISOString().slice(0, 10);
-  document.getElementById('trip-origen').value      = '';
-  document.getElementById('trip-destino').value     = '';
-  document.getElementById('trip-cliente').value     = '';
-  document.getElementById('trip-descripcion').value = '';
-  document.getElementById('trip-importe').value     = '';
-  document.getElementById('trip-pagado').value      = 'false';
-  document.getElementById('trip-observaciones').value = '';
-  document.getElementById('trip-edit-id').value     = '';
+  document.getElementById('modal-trip-title').textContent  = 'Nuevo Viaje';
+  document.getElementById('trip-fecha').value              = new Date().toISOString().slice(0, 10);
+  document.getElementById('trip-importe').value            = '';
+  document.getElementById('trip-observaciones').value      = '';
+  document.getElementById('trip-edit-id').value            = '';
   openModal('modal-trip');
-  setTimeout(() => document.getElementById('trip-origen').focus(), 80);
+  setTimeout(() => document.getElementById('trip-importe').focus(), 80);
 }
 
 function openEditTrip(id) {
@@ -384,12 +365,7 @@ function openEditTrip(id) {
   if (!trip) return;
   document.getElementById('modal-trip-title').textContent  = 'Editar Viaje';
   document.getElementById('trip-fecha').value              = trip.fecha;
-  document.getElementById('trip-origen').value             = trip.origen;
-  document.getElementById('trip-destino').value            = trip.destino;
-  document.getElementById('trip-cliente').value            = trip.cliente || '';
-  document.getElementById('trip-descripcion').value        = trip.descripcion || '';
   document.getElementById('trip-importe').value            = trip.importe;
-  document.getElementById('trip-pagado').value             = trip.pagado ? 'true' : 'false';
   document.getElementById('trip-observaciones').value      = trip.observaciones || '';
   document.getElementById('trip-edit-id').value            = trip.id;
   openModal('modal-trip');
@@ -401,12 +377,8 @@ function saveTrip(e) {
   const data = {
     choferId:      currentDriverId,
     fecha:         document.getElementById('trip-fecha').value,
-    origen:        document.getElementById('trip-origen').value.trim(),
-    destino:       document.getElementById('trip-destino').value.trim(),
-    cliente:       document.getElementById('trip-cliente').value.trim(),
-    descripcion:   document.getElementById('trip-descripcion').value.trim(),
     importe:       parseFloat(document.getElementById('trip-importe').value) || 0,
-    pagado:        document.getElementById('trip-pagado').value === 'true',
+    pagado:        editId ? (db.viajes.find(v => v.id === editId)?.pagado || false) : false,
     observaciones: document.getElementById('trip-observaciones').value.trim(),
   };
 
@@ -443,7 +415,7 @@ function confirmDeleteTrip(id) {
   if (!trip) return;
   showConfirm(
     'Eliminar Viaje',
-    `¿Eliminar el viaje ${escHtml(trip.origen)} → ${escHtml(trip.destino)} del ${formatDate(trip.fecha)}?`,
+    `¿Eliminar el viaje del ${formatDate(trip.fecha)} por ${formatMoney(trip.importe)}?`,
     () => {
       db.viajes = db.viajes.filter(v => v.id !== id);
       saveDb();

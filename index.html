@@ -120,9 +120,6 @@
         <button class="tab-btn" data-filter="pending" onclick="setTripFilter('pending', this)">Pendientes</button>
         <button class="tab-btn" data-filter="paid" onclick="setTripFilter('paid', this)">Pagados</button>
       </div>
-      <div class="trip-search-wrap">
-        <input type="text" id="trip-search" placeholder="Buscar destino, cliente..." oninput="onTripSearch(this.value)" autocomplete="off">
-      </div>
     </section>
 
     <!-- Acciones de viajes -->
@@ -177,7 +174,7 @@
   <!-- MODAL: VIAJE                                                 -->
   <!-- ============================================================ -->
   <div id="modal-trip" class="modal-overlay" onclick="closeModalOutside(event, 'modal-trip')">
-    <div class="modal-box modal-box-wide" role="dialog" aria-modal="true">
+    <div class="modal-box" role="dialog" aria-modal="true">
       <div class="modal-header">
         <h3 id="modal-trip-title">Nuevo Viaje</h3>
         <button class="modal-close" onclick="closeModal('modal-trip')" aria-label="Cerrar">
@@ -196,42 +193,15 @@
               <input type="number" id="trip-importe" required min="0" step="1" placeholder="0">
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="trip-origen">Origen *</label>
-              <input type="text" id="trip-origen" required placeholder="Ej: Mendoza" autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="trip-destino">Destino *</label>
-              <input type="text" id="trip-destino" required placeholder="Ej: Buenos Aires" autocomplete="off">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="trip-cliente">Cliente</label>
-              <input type="text" id="trip-cliente" placeholder="Nombre del cliente" autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="trip-pagado">Estado</label>
-              <select id="trip-pagado">
-                <option value="false">Pendiente</option>
-                <option value="true">Pagado</option>
-              </select>
-            </div>
-          </div>
           <div class="form-group">
-            <label for="trip-descripcion">Descripción del flete</label>
-            <input type="text" id="trip-descripcion" placeholder="Ej: Carga completa, frutas..." autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="trip-observaciones">Observaciones</label>
-            <textarea id="trip-observaciones" rows="2" placeholder="Notas opcionales..."></textarea>
+            <label for="trip-observaciones">Comentarios</label>
+            <textarea id="trip-observaciones" rows="3" placeholder="Notas opcionales..."></textarea>
           </div>
           <input type="hidden" id="trip-edit-id">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeModal('modal-trip')">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar Viaje</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
       </form>
     </div>
