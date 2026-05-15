@@ -1,0 +1,27 @@
+{
+  "name": "Sueldo Choferes",
+  "short_name": "Sueldos",
+  "description": "Gestión de sueldos y viajes pendientes de choferes",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#231508",
+  "theme_color": "#231508",
+  "lang": "es",
+  "categories": ["business", "finance"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": []
+}

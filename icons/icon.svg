@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- background -->
+  <rect width="512" height="512" rx="96" fill="#231508"/>
+  <!-- truck body -->
+  <rect x="48" y="220" width="280" height="180" rx="20" fill="#C4952A"/>
+  <!-- truck cab -->
+  <path d="M328 280 L328 400 L440 400 L440 320 L400 280 Z" fill="#C4952A"/>
+  <!-- cab window -->
+  <path d="M338 292 L338 340 L428 340 L428 325 L395 292 Z" fill="#231508" opacity=".5"/>
+  <!-- wheels -->
+  <circle cx="130" cy="400" r="52" fill="#231508"/>
+  <circle cx="130" cy="400" r="28" fill="#8B6B14"/>
+  <circle cx="370" cy="400" r="52" fill="#231508"/>
+  <circle cx="370" cy="400" r="28" fill="#8B6B14"/>
+  <!-- cargo lines -->
+  <rect x="80" y="250" width="220" height="14" rx="7" fill="#231508" opacity=".25"/>
+  <rect x="80" y="286" width="220" height="14" rx="7" fill="#231508" opacity=".25"/>
+  <rect x="80" y="322" width="220" height="14" rx="7" fill="#231508" opacity=".25"/>
+  <!-- peso sign -->
+  <text x="256" y="188" font-family="Georgia,serif" font-size="100" font-weight="bold" fill="#C4952A" text-anchor="middle">$</text>
+</svg>

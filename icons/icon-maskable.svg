@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- full bleed background for maskable -->
+  <rect width="512" height="512" fill="#231508"/>
+  <!-- truck body (slightly smaller, centered for safe zone) -->
+  <rect x="72" y="230" width="260" height="165" rx="18" fill="#C4952A"/>
+  <!-- cab -->
+  <path d="M332 282 L332 395 L430 395 L430 322 L393 282 Z" fill="#C4952A"/>
+  <!-- cab window -->
+  <path d="M342 294 L342 338 L420 338 L420 322 L390 294 Z" fill="#231508" opacity=".45"/>
+  <!-- wheels -->
+  <circle cx="145" cy="395" r="48" fill="#231508"/>
+  <circle cx="145" cy="395" r="26" fill="#8B6B14"/>
+  <circle cx="368" cy="395" r="48" fill="#231508"/>
+  <circle cx="368" cy="395" r="26" fill="#8B6B14"/>
+  <!-- cargo lines -->
+  <rect x="100" y="258" width="200" height="12" rx="6" fill="#231508" opacity=".22"/>
+  <rect x="100" y="292" width="200" height="12" rx="6" fill="#231508" opacity=".22"/>
+  <rect x="100" y="326" width="200" height="12" rx="6" fill="#231508" opacity=".22"/>
+  <!-- $ sign -->
+  <text x="256" y="196" font-family="Georgia,serif" font-size="92" font-weight="bold" fill="#C4952A" text-anchor="middle">$</text>
+</svg>
