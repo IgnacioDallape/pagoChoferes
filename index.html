@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sueldo Choferes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <svg class="topbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="1" y="10" width="15" height="10" rx="1.5"/>
+          <path d="M16 14h4l3 3v3h-7V14z"/>
+          <circle cx="5" cy="20" r="2"/><circle cx="19" cy="20" r="2"/>
+        </svg>
+        <h1>Sueldo Choferes</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- VISTA PRINCIPAL                                              -->
+  <!-- ============================================================ -->
+  <div id="view-main" class="view active">
+
+    <!-- Stats Globales -->
+    <section class="stats-bar" id="global-stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Adeudado</div>
+        <div class="stat-value accent" id="stat-total-owed">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Viajes Pendientes</div>
+        <div class="stat-value pending" id="stat-pending-trips">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Viajes Pagados</div>
+        <div class="stat-value paid" id="stat-paid-trips">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Choferes Activos</div>
+        <div class="stat-value" id="stat-drivers">0</div>
+      </div>
+    </section>
+
+    <!-- Buscador + Botón -->
+    <section class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l3 3"/>
+        </svg>
+        <input type="text" id="driver-search" placeholder="Buscar chofer..." oninput="onDriverSearch(this.value)" autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="openAddDriver()">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+        Nuevo Chofer
+      </button>
+    </section>
+
+    <!-- Grid de Choferes -->
+    <section class="driver-grid" id="driver-grid"></section>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- VISTA DETALLE CHOFER                                         -->
+  <!-- ============================================================ -->
+  <div id="view-driver" class="view">
+
+    <div class="detail-header">
+      <button class="btn-back" onclick="goBack()">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"/></svg>
+        Volver
+      </button>
+      <div class="detail-driver-info">
+        <h2 id="detail-driver-name">Nombre</h2>
+        <p id="detail-driver-phone" class="detail-driver-phone"></p>
+      </div>
+      <div class="detail-actions">
+        <button class="btn btn-outline" onclick="openEditDriver()">Editar</button>
+        <button class="btn btn-danger-outline" onclick="confirmDeleteDriver()">Eliminar</button>
+      </div>
+    </div>
+
+    <!-- Stats del Chofer -->
+    <section class="driver-stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Adeudado</div>
+        <div class="stat-value pending" id="detail-total-owed">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pendientes</div>
+        <div class="stat-value" id="detail-pending-count">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pagados</div>
+        <div class="stat-value paid" id="detail-paid-count">0</div>
+      </div>
+    </section>
+
+    <!-- Controles de viajes -->
+    <section class="trip-controls">
+      <div class="filter-tabs" role="group">
+        <button class="tab-btn active" data-filter="all" onclick="setTripFilter('all', this)">Todos</button>
+        <button class="tab-btn" data-filter="pending" onclick="setTripFilter('pending', this)">Pendientes</button>
+        <button class="tab-btn" data-filter="paid" onclick="setTripFilter('paid', this)">Pagados</button>
+      </div>
+      <div class="trip-search-wrap">
+        <input type="text" id="trip-search" placeholder="Buscar destino, cliente..." oninput="onTripSearch(this.value)" autocomplete="off">
+      </div>
+    </section>
+
+    <!-- Acciones de viajes -->
+    <section class="trip-actions">
+      <button class="btn btn-primary" onclick="openAddTrip()">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+        Agregar Viaje
+      </button>
+      <button class="btn btn-danger-outline btn-sm" onclick="confirmDeletePaidTrips()">Eliminar Pagados</button>
+    </section>
+
+    <!-- Lista de viajes -->
+    <section class="trip-list" id="trip-list"></section>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: CHOFER                                                -->
+  <!-- ============================================================ -->
+  <div id="modal-driver" class="modal-overlay" onclick="closeModalOutside(event, 'modal-driver')">
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="modal-driver-title">Nuevo Chofer</h3>
+        <button class="modal-close" onclick="closeModal('modal-driver')" aria-label="Cerrar">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/></svg>
+        </button>
+      </div>
+      <form id="form-driver" onsubmit="saveDriver(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="driver-nombre">Nombre *</label>
+            <input type="text" id="driver-nombre" required placeholder="Ej: Juan Rodríguez" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="driver-telefono">Teléfono</label>
+            <input type="tel" id="driver-telefono" placeholder="Ej: 261 555-1234">
+          </div>
+          <div class="form-group">
+            <label for="driver-observaciones">Observaciones</label>
+            <textarea id="driver-observaciones" rows="3" placeholder="Notas opcionales..."></textarea>
+          </div>
+          <input type="hidden" id="driver-edit-id">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-driver')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: VIAJE                                                 -->
+  <!-- ============================================================ -->
+  <div id="modal-trip" class="modal-overlay" onclick="closeModalOutside(event, 'modal-trip')">
+    <div class="modal-box modal-box-wide" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="modal-trip-title">Nuevo Viaje</h3>
+        <button class="modal-close" onclick="closeModal('modal-trip')" aria-label="Cerrar">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/></svg>
+        </button>
+      </div>
+      <form id="form-trip" onsubmit="saveTrip(event)">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trip-fecha">Fecha *</label>
+              <input type="date" id="trip-fecha" required>
+            </div>
+            <div class="form-group">
+              <label for="trip-importe">Importe *</label>
+              <input type="number" id="trip-importe" required min="0" step="1" placeholder="0">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trip-origen">Origen *</label>
+              <input type="text" id="trip-origen" required placeholder="Ej: Mendoza" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="trip-destino">Destino *</label>
+              <input type="text" id="trip-destino" required placeholder="Ej: Buenos Aires" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trip-cliente">Cliente</label>
+              <input type="text" id="trip-cliente" placeholder="Nombre del cliente" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="trip-pagado">Estado</label>
+              <select id="trip-pagado">
+                <option value="false">Pendiente</option>
+                <option value="true">Pagado</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="trip-descripcion">Descripción del flete</label>
+            <input type="text" id="trip-descripcion" placeholder="Ej: Carga completa, frutas..." autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="trip-observaciones">Observaciones</label>
+            <textarea id="trip-observaciones" rows="2" placeholder="Notas opcionales..."></textarea>
+          </div>
+          <input type="hidden" id="trip-edit-id">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-trip')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Viaje</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: CONFIRMACION                                          -->
+  <!-- ============================================================ -->
+  <div id="modal-confirm" class="modal-overlay" onclick="closeModalOutside(event, 'modal-confirm')">
+    <div class="modal-box modal-box-sm" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="confirm-title">Confirmar</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message" class="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-confirm')">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirm-ok-btn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
