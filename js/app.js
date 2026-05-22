@@ -3,8 +3,8 @@
 ============================================================ */
 
 const AUTH_USERS = [
-  { username: 'nacho',  pass: 'nacho',  id: '' },
-  { username: 'damian', pass: '2026',   id: 'damian' },
+  { username: 'ignacio', pass: '2406', id: '' },
+  { username: 'damian',  pass: '2026', id: 'damian' },
 ];
 
 let currentUser = null;
