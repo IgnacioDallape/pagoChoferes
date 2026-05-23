@@ -1,75 +1,10 @@
 /* ============================================================
-   Auth
-============================================================ */
-
-const AUTH_USERS = [
-  { username: 'ignacio', pass: '2406', id: '' },
-  { username: 'damian',  pass: '2026', id: 'damian' },
-];
-
-let currentUser = null;
-
-function storageKey() {
-  return currentUser?.id ? `sueldo_choferes_v1_${currentUser.id}` : 'sueldo_choferes_v1';
-}
-
-function initAuth() {
-  const saved = localStorage.getItem('sc_session');
-  if (saved) {
-    const user = AUTH_USERS.find(u => u.username === saved);
-    if (user) {
-      currentUser = user;
-      db = loadDb();
-      updateTopbarUser();
-      showView('view-main');
-      renderDriverGrid();
-      return;
-    }
-  }
-  showView('view-login');
-}
-
-function login(e) {
-  e.preventDefault();
-  const username = document.getElementById('login-user').value.trim().toLowerCase();
-  const pass     = document.getElementById('login-pass').value;
-  const user     = AUTH_USERS.find(u => u.username === username && u.pass === pass);
-  const errEl    = document.getElementById('login-error');
-
-  if (!user) {
-    errEl.style.display = 'block';
-    document.getElementById('login-pass').value = '';
-    return;
-  }
-
-  errEl.style.display = 'none';
-  currentUser = user;
-  localStorage.setItem('sc_session', username);
-  db = loadDb();
-  updateTopbarUser();
-  showView('view-main');
-  renderDriverGrid();
-}
-
-function logout() {
-  localStorage.removeItem('sc_session');
-  currentUser = null;
-  db = { choferes: [], viajes: [] };
-  driverSearch = '';
-  document.getElementById('driver-search').value = '';
-  showView('view-login');
-}
-
-function updateTopbarUser() {
-  const el = document.getElementById('topbar-username');
-  if (el) el.textContent = currentUser?.username || '';
-}
-
-/* ============================================================
    Storage & State
 ============================================================ */
 
-let db = { choferes: [], viajes: [] };
+const STORAGE_KEY = 'sueldo_choferes_v1';
+
+let db = loadDb();
 let currentDriverId = null;
 let tripFilter = 'all';
 let tripSearch = '';
@@ -78,7 +13,7 @@ let confirmCallback = null;
 
 function loadDb() {
   try {
-    const raw    = localStorage.getItem(storageKey());
+    const raw    = localStorage.getItem(STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : null;
     return {
       choferes: parsed?.choferes || [],
@@ -90,7 +25,7 @@ function loadDb() {
 }
 
 function saveDb() {
-  localStorage.setItem(storageKey(), JSON.stringify(db));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
 }
 
 function genId() {
@@ -558,4 +493,4 @@ document.addEventListener('keydown', e => {
    Init
 ============================================================ */
 
-initAuth();
+renderDriverGrid();
