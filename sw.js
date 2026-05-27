@@ -1,5 +1,5 @@
 // Incrementar VERSION cada vez que se despliega un cambio
-const VERSION = 11;
+const VERSION = 12;
 const CACHE = `sueldo-choferes-v${VERSION}`;
 
 const ASSETS = [

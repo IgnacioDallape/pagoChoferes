@@ -588,8 +588,25 @@ body {
   line-height: 1.1;
 }
 
-.trip-importe.pending { color: var(--pending); }
-.trip-importe.paid    { color: var(--paid); }
+.trip-importe.pending  { color: var(--pending); }
+.trip-importe.paid     { color: var(--paid); }
+.trip-importe.adelanto { color: var(--accent); }
+
+.badge-adelanto {
+  background: #FBF1DC;
+  color: var(--accent);
+  border-color: var(--accent-light);
+}
+
+.trip-card.adelanto { border-left-color: var(--accent); }
+
+.form-hint {
+  display: block;
+  font-size: .72rem;
+  color: var(--text-light);
+  margin-top: .3rem;
+  font-style: italic;
+}
 
 .trip-obs-inline {
   font-size: .8rem;

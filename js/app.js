@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Storage & State
 ============================================================ */
 
@@ -48,7 +48,8 @@ function getDriverOwed(driverId) {
 
 function formatMoney(n) {
   const val = n || 0;
-  return '$ ' + val.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const abs = Math.abs(val).toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  return (val < 0 ? '-$ ' : '$ ') + abs;
 }
 
 function formatDate(str) {
@@ -123,8 +124,8 @@ function renderDriverGrid() {
             <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
           </svg>
         </div>
-        <p>${isSearch ? 'No se encontraron choferes.' : 'Todavía no hay choferes cargados.'}</p>
-        ${!isSearch ? '<small>Hacé clic en "Nuevo Chofer" para empezar.</small>' : ''}
+        <p>${isSearch ? 'No se encontraron choferes.' : 'TodavÃ­a no hay choferes cargados.'}</p>
+        ${!isSearch ? '<small>HacÃ© clic en "Nuevo Chofer" para empezar.</small>' : ''}
       </div>`;
     return;
   }
@@ -236,16 +237,17 @@ function renderTripList() {
             <circle cx="5" cy="20" r="2"/><circle cx="19" cy="20" r="2"/>
           </svg>
         </div>
-        <p>${isEmpty ? 'No hay viajes cargados.' : isFilter ? 'No hay viajes con ese estado.' : 'Sin resultados para esa búsqueda.'}</p>
-        ${isEmpty ? '<small>Hacé clic en "Agregar Viaje" para empezar.</small>' : ''}
+        <p>${isEmpty ? 'No hay viajes cargados.' : isFilter ? 'No hay viajes con ese estado.' : 'Sin resultados para esa bÃºsqueda.'}</p>
+        ${isEmpty ? '<small>HacÃ© clic en "Agregar Viaje" para empezar.</small>' : ''}
       </div>`;
     return;
   }
 
   list.innerHTML = trips.map(v => {
-    const stateClass = v.pagado ? 'paid' : 'pending';
-    const badgeClass = v.pagado ? 'badge-paid' : 'badge-pending';
-    const badgeText  = v.pagado ? 'Pagado' : 'Pendiente';
+    const isAdelanto = (v.importe || 0) < 0;
+    const stateClass = v.pagado ? 'paid' : (isAdelanto ? 'adelanto' : 'pending');
+    const badgeClass = v.pagado ? 'badge-paid' : (isAdelanto ? 'badge-adelanto' : 'badge-pending');
+    const badgeText  = v.pagado ? 'Pagado' : (isAdelanto ? 'Adelanto' : 'Pendiente');
 
     return `
       <div class="trip-card ${stateClass}">
@@ -262,7 +264,7 @@ function renderTripList() {
         <div class="trip-card-bottom">
           <div class="trip-card-actions">
             ${!v.pagado
-              ? `<button class="btn-mark-paid" onclick="markPaid('${v.id}')">✓ Marcar pagado</button>`
+              ? `<button class="btn-mark-paid" onclick="markPaid('${v.id}')">âœ“ Marcar pagado</button>`
               : `<button class="btn-mark-unpaid" onclick="markUnpaid('${v.id}')">Desmarcar</button>`
             }
             <button class="btn-icon" onclick="openEditTrip('${v.id}')" title="Editar">
@@ -335,7 +337,7 @@ function confirmDeleteDriver() {
   if (!driver) return;
   showConfirm(
     'Eliminar Chofer',
-    `¿Eliminar a "${driver.nombre}" y todos sus viajes registrados? Esta acción no se puede deshacer.`,
+    `Â¿Eliminar a "${driver.nombre}" y todos sus viajes registrados? Esta acciÃ³n no se puede deshacer.`,
     () => {
       db.viajes   = db.viajes.filter(v => v.choferId !== currentDriverId);
       db.choferes = db.choferes.filter(c => c.id !== currentDriverId);
@@ -415,7 +417,7 @@ function confirmDeleteTrip(id) {
   if (!trip) return;
   showConfirm(
     'Eliminar Viaje',
-    `¿Eliminar el viaje del ${formatDate(trip.fecha)} por ${formatMoney(trip.importe)}?`,
+    `Â¿Eliminar el viaje del ${formatDate(trip.fecha)} por ${formatMoney(trip.importe)}?`,
     () => {
       db.viajes = db.viajes.filter(v => v.id !== id);
       saveDb();
@@ -433,7 +435,7 @@ function confirmDeletePaidTrips() {
   }
   showConfirm(
     'Eliminar Viajes Pagados',
-    `¿Eliminar ${paid.length} viaje${paid.length !== 1 ? 's' : ''} marcado${paid.length !== 1 ? 's' : ''} como pagado${paid.length !== 1 ? 's' : ''}? Esta acción no se puede deshacer.`,
+    `Â¿Eliminar ${paid.length} viaje${paid.length !== 1 ? 's' : ''} marcado${paid.length !== 1 ? 's' : ''} como pagado${paid.length !== 1 ? 's' : ''}? Esta acciÃ³n no se puede deshacer.`,
     () => {
       const paidIds = new Set(paid.map(v => v.id));
       db.viajes = db.viajes.filter(v => !paidIds.has(v.id));
